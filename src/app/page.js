@@ -76,7 +76,7 @@ export default function HomePage() {
       <div className="relative z-10 text-center px-4 md:px-6 max-w-4xl mx-auto w-full my-auto">
         {/* Central Main Content - Compact Layout */}
         <div className="space-y-4 md:space-y-6 lg:space-y-8">
-          {/* Animated Birthday Emojie */}
+          {/* Animated Birthday Emoji */}
           <motion.div
             className="flex justify-center"
             initial={{ scale: 0, rotate: -180 }}
@@ -148,9 +148,9 @@ export default function HomePage() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1.8, duration: 0.8 }}
               >
-                "You are the most beautiful gift life has given me. Today, we
-                celebrate you - the amazing, wonderful person who makes every
-                day brighter. This is your special day! 🌸"
+                &quot;You are the most beautiful gift life has given me. Today,
+                we celebrate you - the amazing, wonderful person who makes every
+                day brighter. This is your special day! 🌸&quot;
               </motion.p>
             </motion.div>
           </motion.div>

@@ -111,7 +111,7 @@ export default function HomePage() {
             transition={{ duration: 0.8, delay: 0.4 }}
           >
             <TypingText
-              text="Happy Birthday My Love! 💝"
+              text="Happy Birthday My Friend! 💝"
               className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-rose-400 via-fuchsia-400 to-violet-400 bg-clip-text text-transparent leading-tight"
               speed={40}
             />
@@ -124,7 +124,7 @@ export default function HomePage() {
             animate={{ opacity: 1 }}
             transition={{ delay: 1, duration: 0.8 }}
           >
-            To the most wonderful person in my life
+            To the most wonderful person in my life (Aqas Arif)
           </motion.p>
 
           {/* Romantic Card */}
@@ -148,9 +148,9 @@ export default function HomePage() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1.8, duration: 0.8 }}
               >
-                &quot;You are the most beautiful gift life has given me. Today,
-                we celebrate you - the amazing, wonderful person who makes every
-                day brighter. This is your special day! 🌸&quot;
+                "You are the most beautiful gift life has given me. Today, we
+                celebrate you - the amazing, wonderful person who makes every
+                day brighter. This is your special day! 🌸"
               </motion.p>
             </motion.div>
           </motion.div>

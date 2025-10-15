@@ -76,7 +76,7 @@ export default function HomePage() {
       <div className="relative z-10 text-center px-4 md:px-6 max-w-4xl mx-auto w-full my-auto">
         {/* Central Main Content - Compact Layout */}
         <div className="space-y-4 md:space-y-6 lg:space-y-8">
-          {/* Animated Birthday Emoji */}
+          {/* Animated Birthday Emojie */}
           <motion.div
             className="flex justify-center"
             initial={{ scale: 0, rotate: -180 }}

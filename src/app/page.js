@@ -127,7 +127,7 @@ export default function HomePage() {
             To the most wonderful person in my life (Aqas Arif)
           </motion.p>
 
-          {/* Romantic Card */}
+          {/* Friendship Card */}
           <motion.div
             className="max-w-2xl mx-auto mb-4 md:mb-6"
             initial={{ opacity: 0, scale: 0.9 }}
@@ -148,9 +148,10 @@ export default function HomePage() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1.8, duration: 0.8 }}
               >
-                "You are the most beautiful gift life has given me. Today, we
-                celebrate you - the amazing, wonderful person who makes every
-                day brighter. This is your special day! 🌸"
+                &quot;You&apos;re an amazing friend who brings so much joy and
+                laughter into my life. Today we celebrate you - the wonderful,
+                kind-hearted person who makes every day better. This is your
+                special day! 🎉&quot;
               </motion.p>
             </motion.div>
           </motion.div>

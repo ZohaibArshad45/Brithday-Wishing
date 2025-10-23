@@ -1,461 +1,191 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import Confetti from "react-confetti";
+import TrailEffect from "@/components/ConfettiBackground";
 
 export default function MessagePage() {
-  const [visibleBoxes, setVisibleBoxes] = useState([0]);
-  const [allBoxesVisible, setAllBoxesVisible] = useState(false);
+  const [revealed, setRevealed] = useState(0);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+  }, []);
 
   const messages = [
-    {
-      id: 1,
-      title: "🎉 Happy Birthday!",
-      content:
-        "You're not just my best friend, you're family! Wishing you the most amazing birthday filled with joy, laughter, and all the things you love the most.",
-      emoji: "🎂",
-      color: "from-cyan-500 to-blue-500",
-      bgGlow: "bg-cyan-500/20",
-    },
-    {
-      id: 2,
-      title: "🌟 You're Amazing!",
-      content:
-        "Your positive energy, kind heart, and amazing sense of humor make you such a special person. The world is brighter because you're in it!",
-      emoji: "✨",
-      color: "from-purple-500 to-pink-500",
-      bgGlow: "bg-purple-500/20",
-    },
-    {
-      id: 3,
-      title: "💫 Best Friend Goals!",
-      content:
-        "From our crazy adventures to our deep conversations - every moment with you is precious. Thanks for being the best partner in crime!",
-      emoji: "🤝",
-      color: "from-green-500 to-teal-500",
-      bgGlow: "bg-green-500/20",
-    },
-    {
-      id: 4,
-      title: "🎁 Special Wishes!",
-      content:
-        "May this year bring you endless opportunities, beautiful memories, and all the success you deserve. You've got this!",
-      emoji: "🎈",
-      color: "from-orange-500 to-red-500",
-      bgGlow: "bg-orange-500/20",
-    },
-    {
-      id: 5,
-      title: "🚀 Let's Celebrate!",
-      content:
-        "Get ready for an amazing year ahead! More adventures, more laughter, and more unforgettable memories together!",
-      emoji: "🥳",
-      color: "from-yellow-500 to-amber-500",
-      bgGlow: "bg-yellow-500/20",
-    },
+    "🎉 You make every day brighter with your smile.",
+    "💫 You’re the kind of person who turns moments into memories.",
+    "🌈 Keep shining — the world needs your light.",
+    "💖 You’re beautiful inside and out.",
+    "🌟 May your dreams grow as big as your heart.",
+    "🎈 Never stop laughing — it’s your superpower!",
+    "💎 Your kindness makes you glow differently.",
+    "🎁 You bring calm even in chaos — pure magic!",
+    "💜 You make the world softer just by being you.",
+    "🌸 Happiness looks great on you.",
+    "💌 Keep chasing what sets your soul on fire.",
+    "✨ You’re loved — more than you realize.",
+    "🎶 Life’s better with you in it.",
+    "💙 Every day is special because you exist.",
+    "🌷 You inspire without even trying.",
+    "🎀 You are rare — never forget that.",
+    "🔥 You’ve come so far — keep going.",
+    "🌻 The stars envy your shine tonight.",
+    "💫 Today, everything feels lighter because of you.",
+    "🎂 Here’s to more laughter, love, and magic moments!",
   ];
 
-  // Show boxes every 1 second
-  useEffect(() => {
-    const timer = setInterval(() => {
-      if (visibleBoxes.length < messages.length) {
-        setVisibleBoxes((prev) => [...prev, prev.length]);
-      } else {
-        setAllBoxesVisible(true);
-        clearInterval(timer);
+  const handleClick = () => {
+    if (revealed < messages.length) {
+      setRevealed((prev) => prev + 1);
+      if (revealed + 1 === messages.length) {
+        // show confetti after small delay
+        setTimeout(() => setShowConfetti(true), 800);
       }
-    }, 1000);
+    }
+  };
 
-    return () => clearInterval(timer);
-  }, [visibleBoxes.length]);
+  const visibleMessages = messages.slice(
+    Math.max(0, revealed - 3),
+    Math.min(revealed, messages.length)
+  );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-blue-900 text-white relative overflow-y-auto">
-      {/* Background Effects */}
-      <div className="fixed inset-0 pointer-events-none">
+    <div
+      onClick={!showConfetti ? handleClick : undefined}
+      className="relative h-screen w-full flex flex-col items-center justify-center text-white overflow-hidden cursor-pointer"
+    >
+      {/* Background Gradient */}
+      <TrailEffect />
+      <div className="absolute inset-0 bg-gradient-to-br from-indigo-950 via-purple-900 to-fuchsia-900">
         <motion.div
-          className="absolute top-20 left-10 w-80 h-80 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-full blur-3xl"
-          animate={{
-            scale: [1, 1.3, 1],
-            opacity: [0.2, 0.4, 0.2],
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(circle at 30% 20%, rgba(236,72,153,0.25), transparent 60%), radial-gradient(circle at 70% 80%, rgba(139,92,246,0.25), transparent 60%)",
           }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+          animate={{ opacity: [0.6, 0.9, 0.6] }}
+          transition={{ duration: 8, repeat: Infinity }}
         />
-        <motion.div
-          className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-full blur-3xl"
-          animate={{
-            scale: [1.2, 1, 1.2],
-            opacity: [0.3, 0.1, 0.3],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-
-        {/* Floating Stars */}
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-white rounded-full"
-            animate={{
-              scale: [0, 1, 0],
-              opacity: [0, 1, 0],
-            }}
-            transition={{
-              duration: 3 + Math.random() * 2,
-              repeat: Infinity,
-              delay: Math.random() * 5,
-            }}
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-          />
-        ))}
       </div>
 
-      {/* Main Content Container */}
-      <div className="relative z-10 w-full max-w-6xl mx-auto min-h-screen flex flex-col items-center py-20">
-        {/* Header */}
-        <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: -30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
+      {/* Floating Particles */}
+      {[...Array(15)].map((_, i) => (
+        <motion.span
+          key={i}
+          className="absolute text-xl opacity-60"
+          style={{
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+          }}
+          animate={{ y: [0, -20, 0], opacity: [0.3, 0.9, 0.3] }}
+          transition={{
+            duration: 5 + Math.random() * 5,
+            repeat: Infinity,
+            delay: Math.random() * 3,
+          }}
         >
-          <motion.h1
-            className="text-4xl md:text-6xl font-bold mb-6"
-            animate={{
-              scale: [1, 1.05, 1],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-            }}
-          >
-            <span className="bg-gradient-to-r from-cyan-300 via-blue-300 to-purple-300 bg-clip-text text-transparent">
-              Birthday Wishes!
-            </span>
-          </motion.h1>
-          <motion.p
-            className="text-xl text-gray-300"
-            animate={{
-              opacity: [0.7, 1, 0.7],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-            }}
-          >
-            Special messages just for you! 💫
-          </motion.p>
-        </motion.div>
+          {["✨", "💖", "🌸", "🌟"][Math.floor(Math.random() * 4)]}
+        </motion.span>
+      ))}
 
-        {/* Messages Grid */}
-        <div className="w-full px-4 mb-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center">
-            {messages.map((message, index) => (
+      {/* Confetti */}
+      {showConfetti && (
+        <Confetti
+          width={windowSize.width}
+          height={windowSize.height}
+          numberOfPieces={500}
+          recycle={false}
+        />
+      )}
+
+      {/* Title */}
+      <motion.h1
+        className="absolute top-10 text-3xl md:text-5xl font-extrabold text-center bg-gradient-to-r from-pink-300 via-purple-300 to-cyan-300 bg-clip-text text-transparent"
+        animate={{ y: [0, -8, 0], opacity: [1, 0.8, 1] }}
+        transition={{ duration: 3, repeat: Infinity }}
+      >
+        💫 Best Wishes For You, Aqsa 🌷
+      </motion.h1>
+
+      {/* Message Section */}
+      {!showConfetti && (
+        <div className="relative z-20 flex flex-col items-center gap-4 mt-24 mb-10 px-6 w-full max-w-md h-[50vh] justify-center">
+          <AnimatePresence>
+            {visibleMessages.map((msg) => (
               <motion.div
-                key={message.id}
-                initial={{ opacity: 0, y: 60, scale: 0.8 }}
+                key={msg}
+                initial={{ opacity: 0, y: 60, scale: 0.9 }}
                 animate={{
-                  opacity: visibleBoxes.includes(index) ? 1 : 0,
-                  y: visibleBoxes.includes(index) ? 0 : 60,
-                  scale: visibleBoxes.includes(index) ? 1 : 0.8,
+                  opacity: 1,
+                  y: 0,
+                  scale: 1,
+                  boxShadow: "0 0 35px rgba(236,72,153,0.25)",
                 }}
-                transition={{
-                  duration: 0.8,
-                  delay: index * 0.1,
-                  type: "spring",
-                  stiffness: 80,
-                  damping: 15,
-                }}
-                className={`relative ${
-                  visibleBoxes.includes(index) ? "block" : "hidden"
-                } ${
-                  index === 4 ? "md:col-span-2 md:max-w-xl" : "w-full max-w-md"
-                }`}
+                exit={{ opacity: 0, y: -40, scale: 0.95 }}
+                transition={{ duration: 0.6 }}
+                className="w-full text-center text-sm md:text-lg bg-white/10 backdrop-blur-2xl border border-white/20 rounded-2xl px-6 py-4 shadow-lg hover:scale-105 transition-transform duration-300"
               >
-                {/* Glow Effect */}
-                <motion.div
-                  className={`absolute inset-0 ${message.bgGlow} rounded-3xl blur-xl opacity-0`}
-                  animate={{
-                    opacity: visibleBoxes.includes(index) ? [0, 0.6, 0] : 0,
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    delay: index * 0.5,
-                  }}
-                />
-
-                {/* Main Box */}
-                <div
-                  className={`bg-gradient-to-br ${message.color} rounded-3xl p-8 shadow-2xl border border-white/20 backdrop-blur-sm relative overflow-hidden group hover:scale-105 transition-transform duration-300`}
-                >
-                  {/* Animated Border */}
-                  <motion.div
-                    className="absolute inset-0 rounded-3xl bg-gradient-to-r from-transparent via-white/30 to-transparent"
-                    animate={{
-                      opacity: [0, 0.5, 0],
-                    }}
-                    transition={{
-                      duration: 3,
-                      repeat: Infinity,
-                      delay: index * 0.3,
-                    }}
-                  />
-
-                  {/* Content */}
-                  <div className="relative z-10">
-                    {/* Header Section */}
-                    <div className="flex items-center justify-between mb-6">
-                      <motion.h3
-                        className="text-3xl font-bold text-white drop-shadow-lg"
-                        whileHover={{ scale: 1.05 }}
-                        transition={{ type: "spring", stiffness: 300 }}
-                      >
-                        {message.title}
-                      </motion.h3>
-                      <motion.div
-                        className="text-5xl"
-                        animate={{
-                          rotate: [0, 15, -15, 0],
-                          scale: [1, 1.3, 1],
-                        }}
-                        transition={{
-                          duration: 4,
-                          repeat: Infinity,
-                          delay: index * 0.5,
-                        }}
-                        whileHover={{
-                          scale: 1.5,
-                          rotate: 360,
-                          transition: { duration: 0.5 },
-                        }}
-                      >
-                        {message.emoji}
-                      </motion.div>
-                    </div>
-
-                    {/* Message Content */}
-                    <motion.div
-                      className="mb-6"
-                      initial={{ opacity: 0 }}
-                      animate={{
-                        opacity: visibleBoxes.includes(index) ? 1 : 0,
-                      }}
-                      transition={{ delay: index * 0.1 + 0.3 }}
-                    >
-                      <p className="text-lg text-white/95 leading-relaxed font-medium drop-shadow">
-                        {message.content}
-                      </p>
-                    </motion.div>
-
-                    {/* Footer */}
-                    <motion.div
-                      className="flex items-center justify-between pt-4 border-t border-white/30"
-                      initial={{ opacity: 0 }}
-                      animate={{
-                        opacity: visibleBoxes.includes(index) ? 1 : 0,
-                      }}
-                      transition={{ delay: index * 0.1 + 0.5 }}
-                    >
-                      <motion.div
-                        className="flex items-center space-x-2"
-                        animate={{
-                          scale: [1, 1.1, 1],
-                        }}
-                        transition={{
-                          duration: 2,
-                          repeat: Infinity,
-                          delay: index * 0.5,
-                        }}
-                      >
-                        <span className="text-white/80 text-sm font-semibold bg-white/10 px-3 py-1 rounded-full">
-                          Message {index + 1}
-                        </span>
-                      </motion.div>
-
-                      <div className="flex items-center space-x-2">
-                        <span className="text-white/60 text-sm">
-                          {index + 1}/5
-                        </span>
-                        <motion.div
-                          className="w-2 h-2 bg-green-400 rounded-full"
-                          animate={{
-                            scale: [1, 1.5, 1],
-                          }}
-                          transition={{
-                            duration: 1.5,
-                            repeat: Infinity,
-                          }}
-                        />
-                      </div>
-                    </motion.div>
-                  </div>
-
-                  {/* Hover Shine Effect */}
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 transform"
-                    initial={{ x: "-100%" }}
-                    whileHover={{ x: "100%" }}
-                    transition={{ duration: 0.8 }}
-                  />
-                </div>
+                {msg}
               </motion.div>
             ))}
-          </div>
+          </AnimatePresence>
         </div>
+      )}
 
-        {/* Next Section Button */}
-        {allBoxesVisible && (
-          <motion.div
-            className="text-center"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
+      {/* Hint */}
+      {!showConfetti && revealed < messages.length && (
+        <motion.p
+          className="absolute bottom-14 text-white/70 text-sm z-30"
+          animate={{ opacity: [0.4, 1, 0.4] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          Tap anywhere to reveal the next message 🎁
+        </motion.p>
+      )}
+
+      {/* Final Celebration — fully replaces other messages */}
+      {showConfetti && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9, y: 40 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="absolute inset-0 flex flex-col items-center justify-center text-center z-50"
+        >
+          <motion.h2
+            className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-pink-300 via-purple-300 to-cyan-300 bg-clip-text text-transparent drop-shadow-lg"
+            animate={{
+              textShadow: [
+                "0 0 15px #ec4899",
+                "0 0 35px #a855f7",
+                "0 0 15px #22d3ee",
+              ],
+            }}
+            transition={{ duration: 3, repeat: Infinity }}
           >
-            <motion.div
-              className="mb-8"
-              animate={{
-                y: [0, -10, 0],
+            🎊 You’ve unlocked all your surprises, Aqsa!
+          </motion.h2>
+
+          <p className="text-white/80 mt-3 text-base md:text-lg">
+            The best is yet to come 💫
+          </p>
+
+          <Link href="/memories">
+            <motion.button
+              whileHover={{
+                scale: 1.08,
+                boxShadow: "0 0 30px rgba(236,72,153,0.6)",
               }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-              }}
+              whileTap={{ scale: 0.95 }}
+              className="mt-8 bg-gradient-to-r from-pink-600 via-purple-600 to-cyan-600 px-8 py-3 rounded-xl text-white font-semibold text-base md:text-lg shadow-lg"
             >
-              <p className="text-2xl text-cyan-200 font-semibold">
-                All messages revealed! 🎊
-              </p>
-              <p className="text-gray-300 mt-2">
-                Ready to continue the celebration?
-              </p>
-            </motion.div>
-
-            <Link href="/memories">
-              <motion.button
-                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold text-xl px-16 py-5 rounded-2xl shadow-2xl border border-white/30 relative overflow-hidden group"
-                whileHover={{
-                  scale: 1.08,
-                  boxShadow: "0 25px 50px rgba(192, 132, 252, 0.5)",
-                }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <motion.span
-                  className="relative z-10 flex items-center space-x-4"
-                  whileHover={{ x: 8 }}
-                >
-                  <span className="text-2xl">Continue to Memories</span>
-                  <motion.span
-                    animate={{ x: [0, 10, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                    className="text-2xl"
-                  >
-                    🎉
-                  </motion.span>
-                </motion.span>
-
-                {/* Button Effects */}
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -skew-x-12 transform"
-                  initial={{ x: "-100%" }}
-                  whileHover={{ x: "200%" }}
-                  transition={{ duration: 0.8 }}
-                />
-
-                {/* Pulse Border */}
-                <motion.div
-                  className="absolute inset-0 rounded-2xl border-2 border-white/40"
-                  animate={{
-                    opacity: [0.3, 0.8, 0.3],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                  }}
-                />
-              </motion.button>
-            </Link>
-          </motion.div>
-        )}
-
-        {/* Loading Progress */}
-        {!allBoxesVisible && (
-          <motion.div
-            className="text-center mt-8"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-          >
-            <motion.div
-              className="inline-flex items-center space-x-4 bg-white/10 backdrop-blur-lg rounded-2xl px-6 py-3 border border-white/20"
-              animate={{
-                scale: [1, 1.05, 1],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-              }}
-            >
-              <span className="text-gray-200 font-medium">
-                Loading messages... {visibleBoxes.length}/5
-              </span>
-              <motion.div
-                className="flex space-x-1"
-                animate={{
-                  rotate: [0, 180, 360],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "linear",
-                }}
-              >
-                <div className="w-2 h-2 bg-cyan-400 rounded-full" />
-                <div className="w-2 h-2 bg-purple-400 rounded-full" />
-                <div className="w-2 h-2 bg-pink-400 rounded-full" />
-              </motion.div>
-            </motion.div>
-          </motion.div>
-        )}
-      </div>
-
-      {/* Floating Decorations */}
-      <motion.div
-        className="fixed top-8 left-8 text-4xl opacity-70 hidden md:block"
-        animate={{
-          rotate: [0, 360],
-          scale: [1, 1.3, 1],
-        }}
-        transition={{
-          duration: 20,
-          repeat: Infinity,
-          ease: "linear",
-        }}
-      >
-        🎈
-      </motion.div>
-      <motion.div
-        className="fixed top-8 right-8 text-4xl opacity-70 hidden md:block"
-        animate={{
-          y: [0, 25, 0],
-          rotate: [360, 0],
-        }}
-        transition={{
-          duration: 15,
-          repeat: Infinity,
-        }}
-      >
-        🎁
-      </motion.div>
+              Next Page →
+            </motion.button>
+          </Link>
+        </motion.div>
+      )}
     </div>
   );
 }

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Confetti from "react-confetti";
+import TrailEffect from "@/components/ConfettiBackground";
 
 export default function MessagePage() {
   const [revealed, setRevealed] = useState(0);
@@ -56,6 +57,7 @@ export default function MessagePage() {
       className="relative h-screen w-full flex flex-col items-center justify-center text-white overflow-hidden cursor-pointer"
     >
       {/* Background Gradient */}
+      <TrailEffect />
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-950 via-purple-900 to-fuchsia-900">
         <motion.div
           className="absolute inset-0"

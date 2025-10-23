@@ -24,7 +24,7 @@ export default function HomePage() {
       />
 
       {/* Main Content */}
-      <div className="relative z-10 flex flex-col items-center justify-between h-full py-10 w-full max-w-3xl mx-auto">
+      <div className="relative z-10 flex flex-col items-center sm:justify-between justify-center px-8 h-full py-10 w-full max-w-3xl mx-auto">
         {/* Title */}
         <div className="text-center space-y-2 mt-4">
           <TypingText

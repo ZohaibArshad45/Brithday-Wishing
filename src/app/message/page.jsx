@@ -182,7 +182,7 @@ export default function MessagePage() {
             Let’s relive the best memories together 💖
           </motion.p>
 
-          <Link href="/memories">
+          <Link href="/wishes">
             <motion.button
               whileHover={{
                 scale: 1.1,
@@ -191,7 +191,7 @@ export default function MessagePage() {
               whileTap={{ scale: 0.95 }}
               className="mt-8 bg-gradient-to-r from-pink-600 via-purple-600 to-cyan-600 px-8 py-3 rounded-xl text-white font-semibold text-base md:text-lg shadow-lg"
             >
-              Memories Page →
+              wishes Page →
             </motion.button>
           </Link>
         </motion.div>

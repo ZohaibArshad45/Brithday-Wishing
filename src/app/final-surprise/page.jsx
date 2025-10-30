@@ -75,6 +75,21 @@ export default function FinalSurprise() {
     "Today is about celebrating YOU! 🎉",
   ];
 
+  const restartCelebration = () => {
+    setStep(0);
+    setShowConfetti(false);
+    setShowSecretMessage(false);
+
+    // Restart the step animation
+    setTimeout(() => setStep(1), 2000);
+    setTimeout(() => setStep(2), 4000);
+    setTimeout(() => setStep(3), 6000);
+    setTimeout(() => {
+      setStep(4);
+      setShowConfetti(true);
+    }, 8000);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-blue-900 text-white relative overflow-hidden">
       {/* Confetti */}
@@ -199,6 +214,14 @@ export default function FinalSurprise() {
               🎂 Happy Birthday Aqsa! 🎂
             </motion.h2>
 
+            <motion.p
+              className="text-2xl text-cyan-200 font-semibold"
+              animate={{ opacity: [0.7, 1, 0.7] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              You're truly special! 🌷
+            </motion.p>
+
             {/* Secret Message Button */}
             <motion.button
               onClick={() => setShowSecretMessage(!showSecretMessage)}
@@ -231,16 +254,53 @@ export default function FinalSurprise() {
               )}
             </AnimatePresence>
 
-            {/* Thank You Button */}
-            <Link href="/thank-you">
+            {/* Action Buttons */}
+            <motion.div
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-8"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+            >
+              {/* Thank You Button */}
+              {/* <Link href="/thank-you">
+                <motion.button
+                  className="bg-gradient-to-r from-yellow-600 to-amber-600 hover:from-yellow-700 hover:to-amber-700 text-white font-semibold text-lg px-8 py-4 rounded-2xl shadow-lg border border-white/20 flex items-center space-x-2"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <span>Next....</span>
+                  <motion.span
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                  >
+                    💝
+                  </motion.span>
+                </motion.button>
+              </Link> */}
+
+              {/* Replay Celebration Button */}
               <motion.button
-                className="bg-gradient-to-r from-yellow-600 to-amber-600 hover:from-yellow-700 hover:to-amber-700 text-white font-semibold text-lg px-8 py-4 rounded-2xl shadow-lg border border-white/20"
+                onClick={restartCelebration}
+                className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-semibold text-lg px-8 py-4 rounded-2xl shadow-lg border border-white/20 flex items-center space-x-2"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                Next....💝
+                <span>Replay Celebration</span>
+                <motion.span
+                  animate={{
+                    rotate: [0, 360],
+                    scale: [1, 1.2, 1],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                  }}
+                  className="text-xl"
+                >
+                  🔄
+                </motion.span>
               </motion.button>
-            </Link>
+            </motion.div>
           </motion.div>
         )}
       </div>

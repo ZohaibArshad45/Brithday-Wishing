@@ -32,7 +32,8 @@ export default function HomePage() {
             className="text-3xl md:text-5xl font-bold bg-gradient-to-r from-pink-300 via-purple-300 to-cyan-300 bg-clip-text text-transparent"
           />
           <TypingText
-            text="Aqsa 🎉"
+            // text="Aqsa Arif 🎉"
+            text="Ahtisham🎉"
             className="text-4xl md:text-6xl font-extrabold bg-gradient-to-r from-cyan-200 via-pink-200 to-purple-200 bg-clip-text text-transparent"
           />
           <p className="text-base text-purple-200">
@@ -85,7 +86,7 @@ export default function HomePage() {
             transition={{ duration: 0.5 }}
             className="text-center mt-4 text-pink-200 text-lg font-medium"
           >
-            🎂 Wishing you the happiest birthday, Aqsa! 💖
+            🎂 Wishing you the happiest birthday, Aqsa Arif! 💖
           </motion.div>
         )}
 

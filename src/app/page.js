@@ -97,8 +97,8 @@ export default function HomePage() {
           transition={{ delay: 0.6, duration: 1 }}
           className="text-center text-purple-100 text-base md:text-lg leading-relaxed max-w-lg mt-6"
         >
-          “May this year bring you everything you’ve been dreaming of. You
-          deserve it all — happiness, success, and endless light.” 💫
+          May this year bring you everything you’ve been dreaming of. You
+          deserve it all happiness, success, and endless light.” 💫
         </motion.p>
 
         {/* Buttons */}

@@ -226,14 +226,14 @@ export default function FinalSurprise() {
             </motion.p>
 
             {/* Secret Message Button */}
-            <motion.button
+            {/* <motion.button
               onClick={() => setShowSecretMessage(!showSecretMessage)}
               className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold text-lg px-8 py-4 rounded-2xl shadow-2xl border border-white/30"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               💌 Click for a Secret Message
-            </motion.button>
+            </motion.button> */}
 
             <AnimatePresence>
               {showSecretMessage && (

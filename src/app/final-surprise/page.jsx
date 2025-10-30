@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Confetti from "react-confetti";
+import TrailEffect from "@/components/ConfettiBackground";
 
 export default function FinalSurprise() {
   const [step, setStep] = useState(0);
@@ -102,6 +103,8 @@ export default function FinalSurprise() {
           gravity={0.1}
         />
       )}
+
+      <TrailEffect />
 
       {/* Floating background hearts */}
       <div className="absolute inset-0">

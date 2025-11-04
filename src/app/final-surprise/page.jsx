@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Link from "next/link";
 import Confetti from "react-confetti";
 import TrailEffect from "@/components/ConfettiBackground";
 
@@ -9,7 +8,6 @@ export default function FinalSurprise() {
   const [step, setStep] = useState(0);
   const [showConfetti, setShowConfetti] = useState(false);
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
-  const [showSecretMessage, setShowSecretMessage] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -20,16 +18,16 @@ export default function FinalSurprise() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Step animation
+  // Step animation - faster transitions
   useEffect(() => {
     const timers = [
-      setTimeout(() => setStep(1), 2000),
-      setTimeout(() => setStep(2), 4000),
-      setTimeout(() => setStep(3), 6000),
+      setTimeout(() => setStep(1), 1500),
+      setTimeout(() => setStep(2), 3000),
+      setTimeout(() => setStep(3), 4500),
       setTimeout(() => {
         setStep(4);
         setShowConfetti(true);
-      }, 8000),
+      }, 6000),
     ];
     return () => timers.forEach(clearTimeout);
   }, []);
@@ -67,130 +65,107 @@ export default function FinalSurprise() {
     },
   ];
 
-  const secretMessages = [
-    "You light up every room you walk into 💫",
-    "Your smile could power a small city 😄",
-    "The world is better with you in it 🌍",
-    "You're someone's reason to smile today 🌸",
-    "Keep being your amazing self! 🎀",
-    "Today is about celebrating YOU! 🎉",
+  const specialMemories = [
+    {
+      text: "That jeep ride in Naran… memories that never fade.",
+      emoji: "🚙",
+      bgColor: "from-blue-500/20 to-cyan-500/20",
+    },
+    {
+      text: "It was just a meeting excuse, but my eyes couldn't stop looking at you.",
+      emoji: "😍",
+      bgColor: "from-pink-500/20 to-rose-500/20",
+    },
   ];
+
+  const finalMessage =
+    "Every moment with you becomes a beautiful memory that I'll cherish forever. You're not just special, you're everything. 💖";
 
   const restartCelebration = () => {
     setStep(0);
     setShowConfetti(false);
-    setShowSecretMessage(false);
-
-    // Restart the step animation
-    setTimeout(() => setStep(1), 2000);
-    setTimeout(() => setStep(2), 4000);
-    setTimeout(() => setStep(3), 6000);
+    setTimeout(() => setStep(1), 1500);
+    setTimeout(() => setStep(2), 3000);
+    setTimeout(() => setStep(3), 4500);
     setTimeout(() => {
       setStep(4);
       setShowConfetti(true);
-    }, 8000);
+    }, 6000);
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-blue-900 text-white relative overflow-hidden">
+      <TrailEffect />
       {/* Confetti */}
       {showConfetti && (
         <Confetti
           width={windowSize.width}
           height={windowSize.height}
-          numberOfPieces={250}
+          numberOfPieces={150}
           recycle={false}
-          gravity={0.1}
+          gravity={0.15}
         />
       )}
 
-      <TrailEffect />
-
-      {/* Floating background hearts */}
-      <div className="absolute inset-0">
-        {[...Array(20)].map((_, i) => (
+      {/* Minimal Floating Elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        {[...Array(8)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute text-2xl"
+            className="absolute text-xl opacity-40"
             animate={{
-              y: [0, -100, 0],
-              x: [0, Math.sin(i) * 50, 0],
-              rotate: [0, 180, 360],
+              y: [0, -30],
             }}
             transition={{
-              duration: 8 + Math.random() * 4,
+              duration: 8,
               repeat: Infinity,
-              delay: i * 0.5,
+              delay: i * 1,
+              ease: "easeInOut",
             }}
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
             }}
           >
-            {["💖", "💕", "💓", "💗", "💘"][i % 5]}
+            {["✨", "⭐", "💫"][i % 3]}
           </motion.div>
         ))}
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-8">
-        {/* Progress Dots */}
-        <motion.div
-          className="flex space-x-3 mb-12"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-        >
-          {surpriseContent.map((_, index) => (
-            <motion.div
-              key={index}
-              className={`w-3 h-3 rounded-full ${
-                index <= step ? "bg-white" : "bg-white/30"
-              }`}
-              animate={{
-                scale: index === step ? [1, 1.5, 1] : 1,
-              }}
-              transition={{
-                duration: 1,
-                repeat: index === step ? Infinity : 0,
-              }}
-            />
-          ))}
-        </motion.div>
-
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-4">
         {/* Step Content */}
         <AnimatePresence mode="wait">
           {step < surpriseContent.length && (
             <motion.div
               key={step}
-              initial={{ opacity: 0, scale: 0.8, y: 50 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 1.2, y: -50 }}
-              transition={{ duration: 0.8 }}
-              className="text-center space-y-8"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -30 }}
+              transition={{ duration: 0.6 }}
+              className="text-center space-y-6 max-w-2xl mx-auto"
             >
               <motion.div
-                className="text-8xl md:text-9xl"
+                className="text-7xl md:text-8xl mb-4"
                 animate={{
-                  scale: [1, 1.2, 1],
-                  rotate: [0, 10, -10, 0],
-                  y: [0, -20, 0],
+                  scale: [1, 1.1, 1],
                 }}
-                transition={{ duration: 4, repeat: Infinity }}
+                transition={{ duration: 2, repeat: Infinity }}
               >
                 {surpriseContent[step].emoji}
               </motion.div>
 
               <motion.h1
-                className={`text-4xl md:text-6xl font-bold bg-gradient-to-r ${surpriseContent[step].color} bg-clip-text text-transparent`}
-                animate={{ scale: [1, 1.05, 1] }}
-                transition={{ duration: 3, repeat: Infinity }}
+                className={`text-3xl md:text-5xl font-bold bg-gradient-to-r ${surpriseContent[step].color} bg-clip-text text-transparent mb-4`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
               >
                 {surpriseContent[step].title}
               </motion.h1>
 
               <motion.p
-                className="text-xl md:text-2xl text-gray-200 max-w-2xl mx-auto"
+                className="text-lg md:text-xl text-gray-200"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
@@ -206,102 +181,86 @@ export default function FinalSurprise() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1 }}
-            className="space-y-10 mt-10 text-center"
+            transition={{ duration: 0.8 }}
+            className="text-center w-full max-w-3xl mx-auto space-y-8"
           >
-            <motion.h2
-              className="text-5xl md:text-7xl font-bold"
-              animate={{ scale: [1, 1.1, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              🎂 Happy Birthday Aqsa! 🎂
-            </motion.h2>
+            {/* Birthday Header */}
+            <div className="space-y-4">
+              <motion.h2
+                className="text-4xl md:text-6xl font-bold"
+                initial={{ scale: 0.9 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.5 }}
+              >
+                🎂 Happy Birthday Aqsa! 🎂
+              </motion.h2>
 
-            <motion.p
-              className="text-2xl text-cyan-200 font-semibold"
-              animate={{ opacity: [0.7, 1, 0.7] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              You're truly special! 🌷
-            </motion.p>
+              <motion.p
+                className="text-xl text-cyan-200 font-semibold"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+              >
+                You're truly special! 🌷
+              </motion.p>
+            </div>
 
-            {/* Secret Message Button */}
-            {/* <motion.button
-              onClick={() => setShowSecretMessage(!showSecretMessage)}
-              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold text-lg px-8 py-4 rounded-2xl shadow-2xl border border-white/30"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              💌 Click for a Secret Message
-            </motion.button> */}
-
-            <AnimatePresence>
-              {showSecretMessage && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20 shadow-2xl max-w-2xl mx-auto"
-                >
-                  <h3 className="text-2xl font-bold text-pink-200 mb-4">
-                    Just for you... 💫
-                  </h3>
-                  <p className="text-lg text-white/90 leading-relaxed">
-                    {
-                      secretMessages[
-                        Math.floor(Math.random() * secretMessages.length)
-                      ]
-                    }
-                  </p>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* Action Buttons */}
+            {/* Special Memories */}
             <motion.div
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-8"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
+              className="space-y-4"
             >
-              {/* Thank You Button */}
-              {/* <Link href="/thank-you">
-                <motion.button
-                  className="bg-gradient-to-r from-yellow-600 to-amber-600 hover:from-yellow-700 hover:to-amber-700 text-white font-semibold text-lg px-8 py-4 rounded-2xl shadow-lg border border-white/20 flex items-center space-x-2"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <span>Next....</span>
-                  <motion.span
-                    animate={{ scale: [1, 1.2, 1] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                  >
-                    💝
-                  </motion.span>
-                </motion.button>
-              </Link> */}
+              <h3 className="text-2xl font-bold text-pink-200 mb-4">
+                💖 Special Memories
+              </h3>
 
-              {/* Replay Celebration Button */}
+              {specialMemories.map((memory, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.7 + index * 0.2 }}
+                  className={`bg-gradient-to-br ${memory.bgColor} rounded-2xl p-4 border border-white/20`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <div className="text-2xl">{memory.emoji}</div>
+                    <p className="text-white/90 text-left text-sm md:text-base leading-relaxed flex-1">
+                      {memory.text}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            {/* Final Message */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1 }}
+              className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-2xl p-6 border border-white/20"
+            >
+              <p className="text-lg text-white/90 italic leading-relaxed">
+                {finalMessage}
+              </p>
+            </motion.div>
+
+            {/* Replay Button */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.2 }}
+            >
               <motion.button
                 onClick={restartCelebration}
-                className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-semibold text-lg px-8 py-4 rounded-2xl shadow-lg border border-white/20 flex items-center space-x-2"
-                whileHover={{ scale: 1.05 }}
+                className="bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold text-base px-6 py-3 rounded-xl border border-white/20 hover:scale-105 transition-transform"
                 whileTap={{ scale: 0.95 }}
               >
-                <span>Replay Celebration</span>
-                <motion.span
-                  animate={{
-                    rotate: [0, 360],
-                    scale: [1, 1.2, 1],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                  }}
-                  className="text-xl"
-                >
-                  🔄
-                </motion.span>
+                <span className="flex items-center space-x-2">
+                  <span>Replay Celebration</span>
+                  <span>🔄</span>
+                </span>
               </motion.button>
             </motion.div>
           </motion.div>

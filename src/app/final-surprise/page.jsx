@@ -18,16 +18,17 @@ export default function FinalSurprise() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Step animation - faster transitions
+  // Step animation - proper timing for each step
   useEffect(() => {
     const timers = [
-      setTimeout(() => setStep(1), 1500),
-      setTimeout(() => setStep(2), 3000),
-      setTimeout(() => setStep(3), 4500),
+      setTimeout(() => setStep(1), 2000), // Step 1: 2 seconds
+      setTimeout(() => setStep(2), 4500), // Step 2: 2.5 seconds display
+      setTimeout(() => setStep(3), 7000), // Step 3: 2.5 seconds display
+      setTimeout(() => setStep(4), 9500), // Step 4: 2.5 seconds display
       setTimeout(() => {
-        setStep(4);
+        setStep(5);
         setShowConfetti(true);
-      }, 6000),
+      }, 12000), // Final step: 2.5 seconds display
     ];
     return () => timers.forEach(clearTimeout);
   }, []);
@@ -84,19 +85,20 @@ export default function FinalSurprise() {
   const restartCelebration = () => {
     setStep(0);
     setShowConfetti(false);
-    setTimeout(() => setStep(1), 1500);
-    setTimeout(() => setStep(2), 3000);
-    setTimeout(() => setStep(3), 4500);
+    setTimeout(() => setStep(1), 2000);
+    setTimeout(() => setStep(2), 4500);
+    setTimeout(() => setStep(3), 7000);
+    setTimeout(() => setStep(4), 9500);
     setTimeout(() => {
-      setStep(4);
+      setStep(5);
       setShowConfetti(true);
-    }, 6000);
+    }, 12000);
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-blue-900 text-white relative overflow-hidden">
-      <TrailEffect />
       {/* Confetti */}
+      <TrailEffect />
       {showConfetti && (
         <Confetti
           width={windowSize.width}
@@ -136,7 +138,7 @@ export default function FinalSurprise() {
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-4">
         {/* Step Content */}
         <AnimatePresence mode="wait">
-          {step < surpriseContent.length && (
+          {step > 0 && step <= surpriseContent.length && (
             <motion.div
               key={step}
               initial={{ opacity: 0, y: 30 }}
@@ -152,16 +154,18 @@ export default function FinalSurprise() {
                 }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
-                {surpriseContent[step].emoji}
+                {surpriseContent[step - 1].emoji}
               </motion.div>
 
               <motion.h1
-                className={`text-3xl md:text-5xl font-bold bg-gradient-to-r ${surpriseContent[step].color} bg-clip-text text-transparent mb-4`}
+                className={`text-3xl md:text-5xl font-bold bg-gradient-to-r ${
+                  surpriseContent[step - 1].color
+                } bg-clip-text text-transparent mb-4`}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
               >
-                {surpriseContent[step].title}
+                {surpriseContent[step - 1].title}
               </motion.h1>
 
               <motion.p
@@ -170,14 +174,14 @@ export default function FinalSurprise() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
               >
-                {surpriseContent[step].description}
+                {surpriseContent[step - 1].description}
               </motion.p>
             </motion.div>
           )}
         </AnimatePresence>
 
         {/* Final Stage */}
-        {step === 4 && (
+        {step === 5 && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

@@ -196,7 +196,7 @@ export default function FinalSurprise() {
                 animate={{ scale: 1 }}
                 transition={{ duration: 0.5 }}
               >
-                🎂 Happy Birthday Aqsa! 🎂
+                🎂 Happy Birthday Zaru! 🎂
               </motion.h2>
 
               <motion.p
@@ -205,12 +205,14 @@ export default function FinalSurprise() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
               >
-                You're truly special! 🌷
+                Wishing you a year filled with ease, growth and blessings. May
+                every day bring you something good, and may this new year of
+                your life become your best one yet. 🌷
               </motion.p>
             </div>
 
             {/* Special Memories */}
-            <motion.div
+            {/* <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
@@ -236,10 +238,10 @@ export default function FinalSurprise() {
                   </div>
                 </motion.div>
               ))}
-            </motion.div>
+            </motion.div> */}
 
             {/* Final Message */}
-            <motion.div
+            {/* <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1 }}
@@ -248,7 +250,7 @@ export default function FinalSurprise() {
               <p className="text-lg text-white/90 italic leading-relaxed">
                 {finalMessage}
               </p>
-            </motion.div>
+            </motion.div> */}
 
             {/* Replay Button */}
             <motion.div

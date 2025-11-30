@@ -99,7 +99,7 @@ export default function MemoriesPage() {
       <div className="text-center mb-12 relative z-10">
         <div className="text-6xl mb-4 animate-bounce">📸</div>
         <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-pink-300 via-purple-300 to-cyan-300 bg-clip-text text-transparent">
-          Cherished Memories, Aqsa 🌷
+          Cherished Memories, Zara 🌷
         </h1>
         <p className="text-gray-300 mt-2">Reliving our best times 💫</p>
       </div>

@@ -60,8 +60,8 @@ export default function FinalSurprise() {
     },
     {
       emoji: "🌟",
-      title: "The Final Reveal!",
-      description: "You've unlocked the ultimate birthday message!",
+      // title: "Just For You!",
+      // description: "You've unlocked the ultimate birthday message!",
       color: "from-emerald-500 to-teal-500",
     },
   ];

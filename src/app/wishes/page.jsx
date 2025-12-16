@@ -220,7 +220,7 @@ export default function WishesPage() {
                 whileTap={{ scale: 0.95 }}
               >
                 <span className="flex items-center space-x-2">
-                  <span>Final Surprise</span>
+                  <span>Click Me</span>
                   <span>🎁</span>
                 </span>
               </motion.button>

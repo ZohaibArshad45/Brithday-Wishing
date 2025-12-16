@@ -74,7 +74,7 @@ export default function WishesPage() {
       className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-blue-900 text-white relative overflow-y-auto cursor-pointer"
       onClick={handleRevealNext}
     >
-      <TrailEffect />
+      {/* <TrailEffect /> */}
       {/* Simplified Background */}
       <div className="fixed inset-0 pointer-events-none">
         {/* Reduced floating elements */}

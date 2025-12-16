@@ -3,8 +3,10 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Confetti from "react-confetti";
 import TrailEffect from "@/components/ConfettiBackground";
+import { useRouter } from "next/navigation";
 
 export default function FinalSurprise() {
+  const router = useRouter();
   const [step, setStep] = useState(0);
   const [showConfetti, setShowConfetti] = useState(false);
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
@@ -18,17 +20,16 @@ export default function FinalSurprise() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Step animation - proper timing for each step
   useEffect(() => {
     const timers = [
-      setTimeout(() => setStep(1), 2000), // Step 1: 2 seconds
-      setTimeout(() => setStep(2), 4500), // Step 2: 2.5 seconds display
-      setTimeout(() => setStep(3), 7000), // Step 3: 2.5 seconds display
-      setTimeout(() => setStep(4), 9500), // Step 4: 2.5 seconds display
+      setTimeout(() => setStep(1), 2000),
+      setTimeout(() => setStep(2), 4500),
+      setTimeout(() => setStep(3), 7000),
+      setTimeout(() => setStep(4), 9500),
       setTimeout(() => {
         setStep(5);
         setShowConfetti(true);
-      }, 12000), // Final step: 2.5 seconds display
+      }, 12000),
     ];
     return () => timers.forEach(clearTimeout);
   }, []);
@@ -60,45 +61,16 @@ export default function FinalSurprise() {
     },
     {
       emoji: "🌟",
-      // title: "Just For You!",
-      // description: "You've unlocked the ultimate birthday message!",
       color: "from-emerald-500 to-teal-500",
     },
   ];
 
-  const specialMemories = [
-    {
-      text: "That jeep ride in Naran… memories that never fade.",
-      emoji: "🚙",
-      bgColor: "from-blue-500/20 to-cyan-500/20",
-    },
-    {
-      text: "It was just a meeting excuse, but my eyes couldn't stop looking at you.",
-      emoji: "😍",
-      bgColor: "from-pink-500/20 to-rose-500/20",
-    },
-  ];
-
-  const finalMessage =
-    "Every moment with you becomes a beautiful memory that I'll cherish forever. You're not just special, you're everything. 💖";
-
   const restartCelebration = () => {
-    setStep(0);
-    setShowConfetti(false);
-    setTimeout(() => setStep(1), 2000);
-    setTimeout(() => setStep(2), 4500);
-    setTimeout(() => setStep(3), 7000);
-    setTimeout(() => setStep(4), 9500);
-    setTimeout(() => {
-      setStep(5);
-      setShowConfetti(true);
-    }, 12000);
+    router.push("/");
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-blue-900 text-white relative overflow-hidden">
-      {/* Confetti */}
-      <TrailEffect />
       {showConfetti && (
         <Confetti
           width={windowSize.width}
@@ -109,7 +81,6 @@ export default function FinalSurprise() {
         />
       )}
 
-      {/* Minimal Floating Elements */}
       <div className="absolute inset-0 pointer-events-none">
         {[...Array(8)].map((_, i) => (
           <motion.div
@@ -134,9 +105,7 @@ export default function FinalSurprise() {
         ))}
       </div>
 
-      {/* Main Content */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-4">
-        {/* Step Content */}
         <AnimatePresence mode="wait">
           {step > 0 && step <= surpriseContent.length && (
             <motion.div
@@ -180,7 +149,6 @@ export default function FinalSurprise() {
           )}
         </AnimatePresence>
 
-        {/* Final Stage */}
         {step === 5 && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -188,7 +156,6 @@ export default function FinalSurprise() {
             transition={{ duration: 0.8 }}
             className="text-center w-full max-w-3xl mx-auto space-y-8"
           >
-            {/* Birthday Header */}
             <div className="space-y-4">
               <motion.h2
                 className="text-4xl md:text-6xl font-bold"
@@ -211,48 +178,6 @@ export default function FinalSurprise() {
               </motion.p>
             </div>
 
-            {/* Special Memories */}
-            {/* <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="space-y-4"
-            >
-              <h3 className="text-2xl font-bold text-pink-200 mb-4">
-                💖 Special Memories
-              </h3>
-
-              {specialMemories.map((memory, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.7 + index * 0.2 }}
-                  className={`bg-gradient-to-br ${memory.bgColor} rounded-2xl p-4 border border-white/20`}
-                >
-                  <div className="flex items-center space-x-3">
-                    <div className="text-2xl">{memory.emoji}</div>
-                    <p className="text-white/90 text-left text-sm md:text-base leading-relaxed flex-1">
-                      {memory.text}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div> */}
-
-            {/* Final Message */}
-            {/* <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1 }}
-              className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-2xl p-6 border border-white/20"
-            >
-              <p className="text-lg text-white/90 italic leading-relaxed">
-                {finalMessage}
-              </p>
-            </motion.div> */}
-
-            {/* Replay Button */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}

@@ -40,7 +40,7 @@ export default function HomePage() {
             Wishing you love, joy, and magic today ✨
           </p>
         </div>
-        <TrailEffect />
+        {/* <TrailEffect /> */}
 
         {/* Cake Section */}
         <motion.div

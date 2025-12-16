@@ -4,10 +4,11 @@ import React, { useState, useEffect, useRef } from "react";
 export default function TrailEffect() {
   const [trail, setTrail] = useState([]);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isMuted, setIsMuted] = useState(false); // Start with sound on
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(true); // Start muted on live site
+  const [userInteracted, setUserInteracted] = useState(false);
   const playerRef = useRef(null);
   const youtubeIframeRef = useRef(null);
+  const userInteractionRef = useRef(false);
 
   const emojiSets = {
     birthday: ["🎂", "🎈", "🎁", "✨", "🌟", "💫", "🎉", "🥳", "🎊", "💝"],
@@ -19,33 +20,42 @@ export default function TrailEffect() {
   const [currentSet, setCurrentSet] = useState("birthday");
   const trailLength = 15;
 
-  // Save state to localStorage when it changes
+  // Track user interaction for autoplay
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("trailEffect_muted", JSON.stringify(isMuted));
-    }
+    const handleUserInteraction = () => {
+      if (!userInteractionRef.current) {
+        userInteractionRef.current = true;
+        setUserInteracted(true);
+
+        // Unmute when user interacts (optional)
+        if (isMuted && playerRef.current) {
+          playerRef.current.unMute();
+          playerRef.current.setVolume(100);
+          setIsMuted(false);
+        }
+
+        // Try to play if paused
+        if (playerRef.current && playerRef.current.playVideo) {
+          playerRef.current.playVideo();
+        }
+      }
+    };
+
+    // Add event listeners for user interaction
+    window.addEventListener("click", handleUserInteraction);
+    window.addEventListener("touchstart", handleUserInteraction);
+    window.addEventListener("keydown", handleUserInteraction);
+
+    return () => {
+      window.removeEventListener("click", handleUserInteraction);
+      window.removeEventListener("touchstart", handleUserInteraction);
+      window.removeEventListener("keydown", handleUserInteraction);
+    };
   }, [isMuted]);
 
-  // Save current time periodically
-  const saveCurrentTime = () => {
-    if (playerRef.current && playerRef.current.getCurrentTime) {
-      try {
-        const currentTime = playerRef.current.getCurrentTime();
-        if (typeof window !== "undefined" && currentTime) {
-          localStorage.setItem(
-            "trailEffect_currentTime",
-            JSON.stringify(currentTime)
-          );
-        }
-      } catch (error) {
-        console.log("Could not get current time:", error);
-      }
-    }
-  };
-
-  // YouTube IFrame API setup
+  // YouTube IFrame API setup - SIMPLIFIED for production
   useEffect(() => {
-    // Load YouTube IFrame API script if not already loaded
+    // Load YouTube IFrame API script
     if (!window.YT) {
       const tag = document.createElement("script");
       tag.src = "https://www.youtube.com/iframe_api";
@@ -55,21 +65,8 @@ export default function TrailEffect() {
 
     // Initialize player
     const initializePlayer = () => {
-      if (playerRef.current) return; // Player already initialized
-
-      // Get saved mute state
-      const savedMuted =
-        typeof window !== "undefined"
-          ? JSON.parse(localStorage.getItem("trailEffect_muted") || "false")
-          : false;
-
-      // Get saved time
-      const savedTime =
-        typeof window !== "undefined"
-          ? JSON.parse(localStorage.getItem("trailEffect_currentTime") || "0")
-          : 0;
-
-      setIsMuted(savedMuted);
+      // Always start muted on production for autoplay to work
+      const startMuted = true;
 
       playerRef.current = new window.YT.Player("youtube-player", {
         videoId: "sqkzN2Ye_pk",
@@ -81,49 +78,22 @@ export default function TrailEffect() {
           modestbranding: 1,
           rel: 0,
           playsinline: 1,
-          mute: savedMuted ? 1 : 0, // Start with saved mute state
+          mute: startMuted ? 1 : 0, // MUTED by default for autoplay
           iv_load_policy: 3,
           disablekb: 1,
           fs: 0,
-          start: Math.floor(savedTime) || 0, // Start from saved time
         },
         events: {
           onReady: (event) => {
-            console.log("YouTube player ready");
-
-            // Seek to saved time more precisely
-            if (savedTime > 0) {
-              setTimeout(() => {
-                event.target.seekTo(savedTime, true);
-              }, 1000);
-            }
-
-            // Start playing
+            console.log("YouTube player ready on production");
+            // Play video (muted as per browser requirements)
             event.target.playVideo();
-            setIsPlaying(true);
+
+            // Set initial mute state in UI
+            setIsMuted(startMuted);
           },
           onStateChange: (event) => {
-            if (event.data === window.YT.PlayerState.PLAYING) {
-              setIsPlaying(true);
-
-              // Start periodic time saving
-              const timeInterval = setInterval(saveCurrentTime, 5000);
-
-              // Clear interval when player stops
-              event.target.addEventListener("onStateChange", (e) => {
-                if (e.data !== window.YT.PlayerState.PLAYING) {
-                  clearInterval(timeInterval);
-                }
-              });
-            } else if (event.data === window.YT.PlayerState.PAUSED) {
-              saveCurrentTime(); // Save when paused
-            } else if (event.data === window.YT.PlayerState.ENDED) {
-              // Save when video ends (for looping)
-              localStorage.setItem(
-                "trailEffect_currentTime",
-                JSON.stringify(0)
-              );
-            }
+            console.log("YouTube player state:", event.data);
           },
           onError: (error) => {
             console.error("YouTube player error:", error);
@@ -139,37 +109,37 @@ export default function TrailEffect() {
       window.onYouTubeIframeAPIReady = initializePlayer;
     }
 
-    // Save time when page is about to unload
-    const handleBeforeUnload = () => {
-      saveCurrentTime();
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
     return () => {
-      // Save time before unmounting
-      saveCurrentTime();
-
-      // Remove event listener
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-
-      // Don't destroy player immediately to maintain state
-      // The player will be reused if component remounts quickly
+      // Clean up
+      if (playerRef.current && playerRef.current.destroy) {
+        playerRef.current.destroy();
+      }
     };
   }, []);
 
   // Handle mute/unmute
-  useEffect(() => {
-    if (playerRef.current && playerRef.current.setVolume) {
-      if (isMuted) {
-        playerRef.current.mute();
-        playerRef.current.setVolume(0);
-      } else {
+  const toggleMute = () => {
+    if (!playerRef.current) return;
+
+    const newMutedState = !isMuted;
+    setIsMuted(newMutedState);
+
+    if (newMutedState) {
+      playerRef.current.mute();
+    } else {
+      // Only unmute if user has interacted
+      if (userInteractionRef.current) {
         playerRef.current.unMute();
         playerRef.current.setVolume(100);
+      } else {
+        // If no interaction yet, show instruction
+        alert(
+          "Please click/tap anywhere on the page first to enable sound, then click the unmute button."
+        );
+        setIsMuted(true); // Keep muted
       }
     }
-  }, [isMuted]);
+  };
 
   useEffect(() => {
     let animationFrameId;
@@ -218,10 +188,6 @@ export default function TrailEffect() {
     };
   }, [currentSet]);
 
-  const toggleMute = () => {
-    setIsMuted(!isMuted);
-  };
-
   // Calculate smooth trail with physics
   const getTrailStyle = (index, total) => {
     const progress = index / total;
@@ -257,6 +223,13 @@ export default function TrailEffect() {
         className="fixed top-0 left-0 w-1 h-1 opacity-0 overflow-hidden pointer-events-none"
         style={{ zIndex: -9999 }}
       />
+
+      {/* Instruction for user (appears only on first load) */}
+      {!userInteracted && (
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-4 py-2 rounded-lg text-sm z-60 pointer-events-auto animate-pulse">
+          🔊 Click anywhere to enable sound
+        </div>
+      )}
 
       {/* Mute/Unmute Coin Button */}
       <button
@@ -323,7 +296,7 @@ export default function TrailEffect() {
 
           {/* Tooltip text */}
           <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-black/70 text-white text-xs px-2 py-1 rounded whitespace-nowrap opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-            {isMuted ? "🔇 Sound Off" : "🔊 Sound On"}
+            {isMuted ? "🔇 Click page first to unmute" : "🔊 Sound On"}
           </div>
         </div>
       </button>
